@@ -9,6 +9,7 @@ def home(request):
         'support_email': settings.DEFAULT_WEDDING_REPLY_EMAIL,
         'website_url': settings.WEDDING_WEBSITE_URL,
         'couple_name': settings.BRIDE_AND_GROOM,
+        'couple_name_genitive': settings.BRIDE_AND_GROOM_GENITIVE,
         'wedding_location': settings.WEDDING_LOCATION,
         'wedding_date': settings.WEDDING_DATE,
     })

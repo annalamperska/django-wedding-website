@@ -15,7 +15,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll" href="#page-top">{{ couple_name }}'s Big Day</a>
+                <a class="navbar-brand page-scroll" href="#page-top">Ślub {{ couple_name_genitive }}</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -27,7 +27,7 @@
                         <a class="page-scroll" href="#event">Event</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#niagara">Niagara-on-the-Lake</a>
+                        <a class="page-scroll" href="#polna">Polna Zdrój</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#other-stuff">Everything Else</a>
@@ -63,21 +63,19 @@
                     <h2 class="section-heading">Welcome!</h2>
                     <hr>
                     <p>
-                        Hello friends and family! It's the week of the wedding!
+                        Szanowni Goście!
                     </p>
                     <p>
-                        If you're looking for information about the event, look no further!
-                        Please see below for all the details regarding <a href="#event" class="page-scroll">Friday night's welcome party</a> and <a href="#saturday-event" class="page-scroll">Saturday's event</a>.
+                        Witamy Was serdecznie i cieszymy się, że już niedługo będziemy mogli wspólnie celebrować dzień naszego ślubu.
+                        Aby ten czas był wyjątkowy i niezapomniany zapraszamy Was do <a href="#polna" class="page-scroll">Polnej Zdrój</a> na weselny weekend, czyli trzy dni uśmiechu, radości i miłości! :) 
                     </p>
                     <p>
-                        To get added to the wedding whatsapp group first create an account and then send an
-                        email to <a href="mailto:{{ support_email }}">{{ support_email }}</a>.
-                        Also, the current front-runner for the wedding hashtag (if you're into that sort of thing) is #getlukky.
+                        Poniżej znajdziecie wszystkie szczegóły dotyczące <a href="#event" class="page-scroll">piątkowego przyjęcia powitalnego</a> oraz <a href="#saturday-event" class="page-scroll">sobotniej imprezy</a>.
                     </p>
                     <p>
-                        Looking forward to seeing everyone soon!
+                        Nie możemy się już doczekać wspólnej zabawy!
                     </p>
-                    <p class="pull-right">- Cory and Rowena</p>
+                    <p class="pull-right">- Ania i Michał</p>
                 </div>
             </div>
         </div>
@@ -98,12 +96,12 @@
                     </a>
                 </div>
                 <div class="col-lg-4 col-sm-6">
-                    <a href="#niagara" class="portfolio-box page-scroll">
+                    <a href="#polna" class="portfolio-box page-scroll">
                         <img src="{% static 'bigday/images/prince-of-wales-hotel-nav.jpg' %}" class="img-responsive" alt="">
                         <div class="portfolio-box-caption">
                             <div class="portfolio-box-caption-content">
                                 <div class="project-name">
-                                    Niagara-on-the-Lake
+                                    Polna Zdrój
                                 </div>
                             </div>
                         </div>
@@ -125,8 +123,8 @@
         </div>
     </section>
     {% include 'partials/event.html' %}
-    <section id="niagara">
-        {% include 'partials/niagara.html' %}
+    <section id="polna">
+        {% include 'partials/polna.html' %}
     </section>
 {% comment %}
         {% include 'partials/wedding-party.html' %}
@@ -146,9 +144,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 text-center">
-                    <h2 class="section-heading">Contact us!</h2>
+                    <h2 class="section-heading">Napisz do nas!</h2>
                     <hr class="primary">
-                    <p>If you have any questions don't hesitate to reach out!</p>
+                    <p>Jeśli macie jakiekolwiek pytania, nie wahajcie się z nami skontaktować :)</p>
                 </div>
                 <div class="col-lg-8 col-lg-offset-2 text-center">
                     <i class="fa fa-envelope-o fa-3x wow bounceIn" data-wow-delay=".1s"></i>
