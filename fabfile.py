@@ -23,7 +23,7 @@ if env.ssh_config_path and os.path.isfile(os.path.expanduser(env.ssh_config_path
 
 env.project = 'bigday'
 env.code_branch = 'master'
-env.sudo_user = 'czue'
+env.sudo_user = 'annalamperska'
 
 ENVIRONMENTS = ('production',)
 
@@ -40,7 +40,7 @@ def _setup_path():
 
 @task
 def production():
-    env.home = "/home/czue"
+    env.home = "/home/annalamperska"
     env.environment = 'bigday'
     env.django_port = '9091'
     _setup_path()

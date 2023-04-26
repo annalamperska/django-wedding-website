@@ -29,7 +29,7 @@ SECRET_KEY = 'u7!-y4k1c6b44q507nr_l+c^12o7ur++cpzyn!$65w^!gum@h%'
 DEBUG = True
 
 # Set to "console" for console output of emails or to "smtp" to send real mails
-MAIL_BACKEND = "console"
+MAIL_BACKEND = "smtp"
 
 ALLOWED_HOSTS = []
 
