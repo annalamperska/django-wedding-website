@@ -137,6 +137,7 @@ STATICFILES_DIRS = (
 # Some default values. Will be overwritten by a localsetting.py (rename 'localsettings.py.template' to 'localsettings.py')
 # This is used in a few places where the names of the couple are used
 BRIDE_AND_GROOM = 'Bride and Groom'
+BRIDE_AND_GROOM_GENITIVE = 'Ani i Michała'
 # the date of your wedding
 WEDDING_DATE = 'January 1st, 1969'
 # the location of your wedding
