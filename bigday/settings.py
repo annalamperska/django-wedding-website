@@ -31,7 +31,7 @@ DEBUG = True
 # Set to "console" for console output of emails or to "smtp" to send real mails
 MAIL_BACKEND = "smtp"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['aniaimichal.pythonanywhere.com']
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
