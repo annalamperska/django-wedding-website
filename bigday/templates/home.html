@@ -24,7 +24,7 @@
                         <a class="page-scroll" href="#main-header">Home</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#event">Event</a>
+                        <a class="page-scroll" href="#event">Wydarzenia</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#polna">Polna Zdrój</a>
@@ -33,7 +33,7 @@
                         <a class="page-scroll" href="#other-stuff">Everything Else</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#contact">Contact</a>
+                        <a class="page-scroll" href="#contact">Kontakt</a>
                     </li>
                 </ul>
             </div>
@@ -45,7 +45,7 @@
     <header id="main-header">
         <div class="header-content">
             <div class="header-content-inner">
-                <h1>We did it!!</h1>
+                <h1>Pobieramy się!!!</h1>
                 {% comment %}
                 <hr>
                 <h2>It's wedding week!</h2>
@@ -60,11 +60,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 text-center">
-                    <h2 class="section-heading">Welcome!</h2>
+                    <h2 class="section-heading">Szanowni Goście!</h2>
                     <hr>
-                    <p>
-                        Szanowni Goście!
-                    </p>
                     <p>
                         Witamy Was serdecznie i cieszymy się, że już niedługo będziemy mogli wspólnie celebrować dzień naszego ślubu.
                         Aby ten czas był wyjątkowy i niezapomniany zapraszamy Was do <a href="#polna" class="page-scroll">Polnej Zdrój</a> na weselny weekend, czyli trzy dni uśmiechu, radości i miłości! :) 
@@ -85,7 +82,7 @@
             <div class="row no-gutter">
                 <div class="col-lg-4 col-sm-6">
                     <a href="#event" class="portfolio-box page-scroll">
-                        <img src="{% static 'bigday/images/ravine-nav.jpg' %}" class="img-responsive" alt="">
+                        <img src="{% static 'bigday/images/polna/ceremony2.jpg' %}" class="img-responsive" alt="">
                         <div class="portfolio-box-caption">
                             <div class="portfolio-box-caption-content">
                                 <div class="project-name">
@@ -97,7 +94,7 @@
                 </div>
                 <div class="col-lg-4 col-sm-6">
                     <a href="#polna" class="portfolio-box page-scroll">
-                        <img src="{% static 'bigday/images/prince-of-wales-hotel-nav.jpg' %}" class="img-responsive" alt="">
+                        <img src="{% static 'bigday/images/polna/intro.jpg' %}" class="img-responsive" alt="">
                         <div class="portfolio-box-caption">
                             <div class="portfolio-box-caption-content">
                                 <div class="project-name">
@@ -129,17 +126,10 @@
 {% comment %}
         {% include 'partials/wedding-party.html' %}
 {% endcomment %}
-    <section id="other-stuff" class="bg-primary">
-        {% include 'partials/misc.html' %}
-    </section>
-    <section id="gifts">
-        {% include 'partials/gifts.html' %}
-    </section>
     <section id="story" class="bg-dark">
         {% include 'partials/story.html' %}
     </section>
     {% include 'partials/proposal.html' %}
-    {% include 'partials/save-the-dates.html' %}
     <section id="contact" class="bg-dark">
         <div class="container">
             <div class="row">
