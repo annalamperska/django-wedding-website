@@ -6,25 +6,24 @@
 {% block page_content %}
     <div class="layer"></div>
     <div class="container" id="main">
-        <h2>Hi {{ party.name }}! Thanks for your response!</h2>
+        <h2>Kochani!</h2>
         {% if party.any_guests_attending %}
             <p>
-                We can't wait to celebrate with you in Niagara!
+                Dziękujemy za potwierdzenie obecności. Już nie możemy doczekać się wspólnej biesiady i świętowania!
             </p>
             <p>
-                If you've got a minute, you can help us out by filling in a <a href="http://goo.gl/forms/AFszTcpPRW">super quick survey</a> that will help us plan for the most fun and smooth event possible.
-                If you have any other questions, don't hesitate to email us at <a href="mailto:{{ support_email }}">{{ support_email }}</a>.
+                Jeśli macie jakiekolwiek pytania, zerknijcie na stronę <a href="{{ website }}">{{ website }}</a>, a jeśli nie znajdziecie odpowiedzi i tam, nie wahajcie się skontaktować z nami mailowo (<a href="mailto:{{ support_email }}">{{ support_email }}</a>) lub telefonicznie (numery podane są w zaproszeniach).
             </p>
         {% else %}
             <p>
-                We're sorry you won't be able to join us in Niagara.
+                Jest nam niezmiernie przykro, że nie będzie Wam dane świętować razem z nami.
             </p>
             <p>
-                We look forward to catching up with you some other time!
+                Wypijcie nasze zdrowie i do zobaczenia przy następnej okazji!
             </p>
         {% endif %}
         <p>
-            - Cory and Rowena
+            - Ania i Michał
         </p>
     </div>
 {% endblock %}
