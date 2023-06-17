@@ -1,12 +1,12 @@
 import csv
 import io
-import uuid
-from guests.models import Party, Guest
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
+import random
+import string
+from guests.models import Party, Guest, INVITATION_ID_LENGTH
 
+
+def _random_uuid():
+    return ''.join([random.choice(string.digits) for _ in range(INVITATION_ID_LENGTH)])
 
 def import_guests(path):
     with open(path, 'r') as csvfile:
@@ -16,7 +16,11 @@ def import_guests(path):
             if first_row:
                 first_row = False
                 continue
-            party_name, first_name, last_name, party_type, is_child, category, is_invited, email = row[:8]
+            if len(row) == 9:
+                party_name, first_name, last_name, party_type, is_child, category, is_invited, email, invitation_id = row[:9]
+            else:
+                party_name, first_name, last_name, party_type, is_child, category, is_invited, email = row[:8]
+                invitation_id = _random_uuid()
             if not party_name:
                 print ('skipping row {}'.format(row))
                 continue
@@ -25,7 +29,7 @@ def import_guests(path):
             party.category = category
             party.is_invited = _is_true(is_invited)
             if not party.invitation_id:
-                party.invitation_id = uuid.uuid4().hex
+                party.invitation_id = invitation_id
             party.save()
             if email:
                 guest, created = Guest.objects.get_or_create(party=party, email=email)

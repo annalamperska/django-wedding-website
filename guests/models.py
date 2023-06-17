@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 import datetime
-import uuid
 
 from django.db import models
 from django.dispatch import receiver
@@ -12,9 +11,8 @@ ALLOWED_TYPES = [
     ('dimagi', 'dimagi'),
 ]
 
+INVITATION_ID_LENGTH = 6
 
-def _random_uuid():
-    return uuid.uuid4().hex
 
 
 class Party(models.Model):
@@ -26,7 +24,7 @@ class Party(models.Model):
     category = models.CharField(max_length=20, null=True, blank=True)
     save_the_date_sent = models.DateTimeField(null=True, blank=True, default=None)
     save_the_date_opened = models.DateTimeField(null=True, blank=True, default=None)
-    invitation_id = models.CharField(max_length=32, db_index=True, default=_random_uuid, unique=True)
+    invitation_id = models.CharField(null=True, max_length=INVITATION_ID_LENGTH, db_index=True, default=None, unique=True)
     invitation_sent = models.DateTimeField(null=True, blank=True, default=None)
     invitation_opened = models.DateTimeField(null=True, blank=True, default=None)
     is_invited = models.BooleanField(default=False)

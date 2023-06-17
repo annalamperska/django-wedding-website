@@ -30,7 +30,7 @@
                         <a class="page-scroll" href="#polna">Polna Zdrój</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#other-stuff">Everything Else</a>
+                        <a  class="btn btn-primary" role="button" href="/rsvp">RSVP</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#contact">Kontakt</a>
@@ -93,24 +93,24 @@
                     </a>
                 </div>
                 <div class="col-lg-4 col-sm-6">
-                    <a href="#polna" class="portfolio-box page-scroll">
-                        <img src="{% static 'bigday/images/polna/intro.jpg' %}" class="img-responsive" alt="">
+                    <a href="/rsvp" class="portfolio-box page-scroll">
+                        <img src="{% static 'bigday/images/rsvp.png' %}" class="img-responsive" alt="">
                         <div class="portfolio-box-caption">
                             <div class="portfolio-box-caption-content">
                                 <div class="project-name">
-                                    Polna Zdrój
+                                    RSVP
                                 </div>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-4 col-sm-6">
-                    <a href="#story" class="portfolio-box page-scroll">
-                        <img src="{% static 'bigday/images/twelve-apostles-nav.jpg' %}" class="img-responsive" alt="">
+                    <a href="#polna" class="portfolio-box page-scroll">
+                        <img src="{% static 'bigday/images/polna/intro.jpg' %}" class="img-responsive" alt="">
                         <div class="portfolio-box-caption">
                             <div class="portfolio-box-caption-content">
                                 <div class="project-name">
-                                    Our Story
+                                    Polna Zdrój
                                 </div>
                             </div>
                         </div>
@@ -123,13 +123,6 @@
     <section id="polna">
         {% include 'partials/polna.html' %}
     </section>
-{% comment %}
-        {% include 'partials/wedding-party.html' %}
-{% endcomment %}
-    <section id="story" class="bg-dark">
-        {% include 'partials/story.html' %}
-    </section>
-    {% include 'partials/proposal.html' %}
     <section id="contact" class="bg-dark">
         <div class="container">
             <div class="row">

@@ -9,7 +9,7 @@ from django.db import migrations
 def reset_invitation_ids(apps, schema_editor):
     Party = apps.get_model("guests", "Party")
     for party in Party.objects.all():
-        party.invitation_id = uuid.uuid4().hex
+        party.invitation_id = None
         party.save()
 
 

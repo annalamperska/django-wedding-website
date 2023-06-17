@@ -16,6 +16,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='party',
             name='invitation_id',
-            field=models.CharField(blank=True, db_index=True, default=guests.models._random_uuid, max_length=32, null=True),
+            field=models.CharField(blank=True, db_index=True, default=None, max_length=32, null=True),
         ),
     ]
