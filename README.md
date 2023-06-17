@@ -157,11 +157,11 @@ You are also able to CC someone on all your outgoing emails using `WEDDING_CC_LI
 To actually be able to send emails, you need to import your guests first.
 The import method expects a CSV file with the following header:
 
-`party_name,first_name,last_name,party_type,is_child,category,is_invited,email`
+`party_name,first_name,last_name,is_child,category,invitation_id`
 
 A sample line could be:
 
-`Party Name,Phred,McPhredson,formal,n,Groom,y,email@domain.tld`
+`Party Name,Phred,McPhredson,n,Groom,123456`
 
 The import command is:
 

@@ -20,14 +20,12 @@ class Party(models.Model):
     A party consists of one or more guests.
     """
     name = models.TextField()
-    type = models.CharField(max_length=10, choices=ALLOWED_TYPES)
     category = models.CharField(max_length=20, null=True, blank=True)
     save_the_date_sent = models.DateTimeField(null=True, blank=True, default=None)
     save_the_date_opened = models.DateTimeField(null=True, blank=True, default=None)
     invitation_id = models.CharField(null=True, max_length=INVITATION_ID_LENGTH, db_index=True, default=None, unique=True)
     invitation_sent = models.DateTimeField(null=True, blank=True, default=None)
     invitation_opened = models.DateTimeField(null=True, blank=True, default=None)
-    is_invited = models.BooleanField(default=False)
     rehearsal_dinner = models.BooleanField(default=False)
     is_attending = models.BooleanField(default=None, null=True)
     comments = models.TextField(null=True, blank=True)
@@ -37,7 +35,7 @@ class Party(models.Model):
 
     @classmethod
     def in_default_order(cls):
-        return cls.objects.order_by('category', '-is_invited', 'name')
+        return cls.objects.order_by('category', 'name')
 
     @property
     def ordered_guests(self):

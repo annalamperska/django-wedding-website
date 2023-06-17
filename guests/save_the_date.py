@@ -81,22 +81,7 @@ def send_save_the_date_to_party(party, test_only=False):
 
 
 def get_template_id_from_party(party):
-    if party.type == 'formal':
-        # all formal guests get formal invites
-        return random.choice(['lions-head', 'ski-trip'])
-    elif party.type == 'dimagi':
-        # all non-formal dimagis get dimagi invites
-        return 'dimagi'
-    elif party.type == 'fun':
-        all_options = list(SAVE_THE_DATE_CONTEXT_MAP.keys())
-        all_options.remove('dimagi')
-        if party.category == 'ro':
-            # don't send the canada invitation to ro's crowd
-            all_options.remove('canada')
-        # otherwise choose randomly from all options for everyone else
-        return random.choice(all_options)
-    else:
-        return None
+    return random.choice(all_options)
 
 
 def get_save_the_date_context(template_id):
