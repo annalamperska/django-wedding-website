@@ -51,10 +51,10 @@ class Party(models.Model):
 
 
 MEALS = [
-    ('beef', 'cow'),
-    ('fish', 'fish'),
-    ('hen', 'hen'),
-    ('vegetarian', 'vegetable'),
+    ('all', 'brak'),
+    ('vege', 'vege'),
+    ('vegan', 'vegan'),
+    ('allergic', 'alergia'),
 ]
 
 
@@ -68,6 +68,7 @@ class Guest(models.Model):
     email = models.TextField(null=True, blank=True)
     is_attending = models.BooleanField(default=None, null=True)
     meal = models.CharField(max_length=20, choices=MEALS, null=True, blank=True)
+    allergic = models.TextField(null=True, blank=True)
     is_plus_one = models.BooleanField(default=False)
 
     @property

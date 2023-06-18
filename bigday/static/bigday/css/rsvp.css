@@ -1,0 +1,31 @@
+#rsvp-form {
+    background-color: #fff;
+    padding-bottom: 2em;
+    margin-top: 2em;
+    padding: 1em;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    border: .2em solid grey;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    opacity: 90%;
+}
+
+#main {
+   display: table;
+   width: 50%;
+}
+
+body {
+    background: url('../images/invite-background.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#footer {
+    padding-bottom: 30px;
+}

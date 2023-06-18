@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block page_head %}
-    <link href="{% static 'bigday/css/invitation.css' %}" rel="stylesheet" xmlns="http://www.w3.org/1999/html">
+    <link href="{% static 'bigday/css/creative.css' %}?{% now 'U' %}" rel="stylesheet">
+    <link href="{% static 'bigday/css/invitation.css' %}?{% now 'U' %}" rel="stylesheet" xmlns="http://www.w3.org/1999/html">
 {% endblock %}
 {% block page_content %}
+<div class="container">
+  <nav class="navbar-fixed-top" id="header">
+    <a class="navbar-brand" href="/">Wstecz</a>
+  </nav>
+</div>
     <div class="container" id="invitation-body">
         <section class="col-md-6 text-center">
             <div id="invitation-details">
@@ -20,7 +26,8 @@
             <div class="clearfix"></div>
             {% csrf_token %}
             {% for guest in party.ordered_guests.all %}
-            <div class="form-group attend" data-is-plus-one="{{ guest.is_plus_one }}">
+            <div class="guest-{{ guest.unique_id }}" data-is-plus-one="{{ guest.is_plus_one }}">
+            <div class="form-group attend">
                 {% with 'attending-'|add:guest.unique_id as attending_label %}
                 <label for="{{ attending_label }}" class="col-sm-3 control-label">{{ guest.name }}</label>
                 <label class="radio-inline">
@@ -31,23 +38,29 @@
                 </label>
                 {% endwith %}
             </div>
-            <div class="form-group meal" data-is-plus-one="{{ guest.is_plus_one }}">
+            <div class="form-group meal">
                 {% with 'meal-'|add:guest.unique_id as meal_label %}
-                <label for="{{ meal_label }}" class="col-sm-3 control-label">... and will eat</label>
+                <label for="{{ meal_label }}" class="col-sm-3 control-label">Dieta</label>
                 {% for meal_id, meal_name in meals %}
                 <label class="radio-inline">
-                    <input type="radio" name="{{ meal_label }}" id="{{ meal_label }}-yes" value="{{ meal_id }}" {% if guest.meal == meal_id %}checked="checked"{% endif %} {% if guest.is_attending == False %}disabled{% endif %} required> {{ meal_name }}
+                    <input class="meal" type="radio" name="{{ meal_label }}" value="{{ meal_id }}" {% if guest.meal == meal_id %}checked="checked"{% endif %} required> {{ meal_name }}
                 </label>
                 {% endfor %}
                 {% endwith %}
             </div>
+            <div class="form-group meal allergic">
+                {% with 'allergic-'|add:guest.unique_id as allergic_label %}
+                <label for="{{ allergic_label }}" class="col-sm-3 control-label"></label>
+                <input type="text" name="{{ allergic_label }}" class="allergic col-sm-8" placeholder="Na jakie pokarmy masz uczulenie?" {% if guest.meal == 'allergic' %}required{% endif %}>
+                {% endwith %}
+            </div></div>
             {% endfor %}
             <div class="form-group col-sm-12">
-                <input type="text" name="comments" class="form-control" placeholder="Questions/comments/well wishes" >
+                <input type="text" name="comments" class="form-control" placeholder="Masz jakieś uwagi lub życzenia muzyczne?" >
             </div>
             <div class="form-group">
                 <div class="text-center">
-                    <input type="submit" class="btn btn-primary" value="Submit Response" />
+                    <input type="submit" class="btn btn-primary" value="Wyślij" />
                 </div>
             </div>
         </form>
@@ -62,38 +75,65 @@
         $("input.attending-radio").change(function (e) {
             var target = $(e.target);
             var value = target.attr('value');
-            var mealButtonContainer = target.closest('.form-group').next('.meal');
-            var is_main_guest = target.closest('.form-group').data('is-plus-one') === 'False';
-            var is_plus_one = document.querySelectorAll('[data-is-plus-one="True"]');
-            
+            var name = target.attr('name');
+            var guestId = 'guest-' + name.split('-').slice(-1);
+
+            var guestContainer = document.getElementsByClassName(guestId)[0];
+            var attendanceContainer = guestContainer.firstElementChild;
+            var mealButtonContainer = attendanceContainer.nextElementSibling;
+            var allergicContainer = mealButtonContainer.nextElementSibling;
+
+            var is_main_guest = guestContainer.getAttribute('data-is-plus-one') === 'False';
+            var plus_one_occurs = document.querySelectorAll('[data-is-plus-one="True"]');
 
             if (value === "no") {
-                mealButtonContainer[0].style.display = "none";
-                if (is_main_guest && is_plus_one) {
-                    for (let i = 0; i < is_plus_one.length; i++) {
-                        is_plus_one[i].style.display = "none";
+                mealButtonContainer.style.display = "none";
+                allergicContainer.style.display = "none";
+                if (is_main_guest && plus_one_occurs) {
+                    for (let i = 0; i < plus_one_occurs.length; i++) {
+                        plus_one_occurs[i].style.display = "none";
                     }
                 }
             } else if(value === "yes") {
-                mealButtonContainer[0].style.display = "block";
-                mealButtons = mealButtonContainer.find('[type=radio]');
-                mealButtons.each(function (index, button) {
-                    button.disabled = false;
-                    button.required = true;
-                });
-                if (is_main_guest && is_plus_one) {
-                    is_plus_one[0].style.display = "block";
-                    checked = is_plus_one[0].getElementsByTagName('input')[0].checked;
-                    if (checked) {
-                        for (let i = 1; i < is_plus_one.length; i++) {
-                        is_plus_one[i].style.display = "block";
+                mealButtonContainer.style.display = "block";
+                mealButtons = mealButtonContainer.children;
+                for (let i = 1; i < mealButtons.length; i++) {
+                    button = mealButtons[i].children[0]
+                    button.disabled = false
+                    if (button.value === 'allergic' && button.checked){
+                        allergicContainer.style.display = "block";
+                    }
+                };   
+                if (is_main_guest && plus_one_occurs) {
+                    plus_one_occurs[0].style.display = "block";
+                    plus_one_attends = plus_one_occurs[0].getElementsByTagName('input')[0].checked;
+                    if (plus_one_attends) {
+                        for (let i = 1; i < plus_one_occurs.length; i++) {
+                        plus_one_occurs[i].style.display = "block";
                     }
                     }
                 };
             };
-                
-
+            // reload validation
+            $(document.forms[0]).validator('destroy');
+            $(document.forms[0]).validator();
+        });
+    });
+    $(function () {
+        // enable/disable meal choices based on attendance
+        $("input.meal").change(function (e) {
+            var target = $(e.target);
+            var value = target.attr('value');
+            var name = target.attr('name');
+            var allergicLabel = 'allergic-' + name.split('-').slice(-1);
+            var allergicContainer = target.closest('.form-group').next('.allergic');
             
+            if (value === "allergic") {
+                allergicContainer[0].style.display = "block";
+                document.getElementsByName(allergicLabel)[0].required; 
+            } else {
+                allergicContainer[0].style.display = "none";
+            };
             // reload validation
             $(document.forms[0]).validator('destroy');
             $(document.forms[0]).validator();

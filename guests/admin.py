@@ -4,7 +4,7 @@ from .models import Guest, Party
 
 class GuestInline(admin.TabularInline):
     model = Guest
-    fields = ('first_name', 'last_name', 'email', 'is_attending', 'meal', 'is_plus_one')
+    fields = ('first_name', 'last_name', 'email', 'is_attending', 'meal', 'allergic', 'is_plus_one')
     readonly_fields = ('first_name', 'last_name')
 
 
@@ -16,8 +16,8 @@ class PartyAdmin(admin.ModelAdmin):
 
 
 class GuestAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'party', 'email', 'is_attending', 'is_plus_one', 'meal')
-    list_filter = ('is_attending', 'is_plus_one', 'meal', 'party__category', 'party__rehearsal_dinner')
+    list_display = ('first_name', 'last_name', 'party', 'email', 'is_attending', 'is_plus_one', 'meal', 'allergic')
+    list_filter = ('is_attending', 'is_plus_one', 'meal', 'allergic', 'party__category', 'party__rehearsal_dinner')
 
 
 admin.site.register(Party, PartyAdmin)

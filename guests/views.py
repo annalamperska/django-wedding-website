@@ -62,16 +62,27 @@ def invitation(request, invite_id):
         # update if this is the first time the invitation was opened
         party.invitation_opened = datetime.utcnow()
         party.save()
+    mainGuestAttends = False
     if request.method == 'POST':
         for response in _parse_invite_params(request.POST):
             guest = Guest.objects.get(pk=response.guest_pk)
             assert guest.party == party
-            guest.is_attending = response.is_attending
-            if response.is_attending:
-                guest.meal = response.meal
-            else:
+            if guest.is_plus_one and not mainGuestAttends:
+                guest.is_attending = False
                 guest.meal = None
+                guest.allergic = None
+            else:
+                guest.is_attending = response.is_attending
+                mainGuestAttends = guest.is_attending
+                if response.is_attending:
+                    guest.meal = response.meal
+                    if guest.meal == 'allergic':
+                        guest.allergic = response.allergic
+                else:
+                    guest.meal = None
+                    guest.allergic = None                
             guest.save()
+            party.save()
         if request.POST.get('comments'):
             comments = request.POST.get('comments')
             party.comments = comments if not party.comments else '{}; {}'.format(party.comments, comments)
@@ -83,7 +94,8 @@ def invitation(request, invite_id):
         'meals': MEALS,
         'couple_name_genitive': settings.BRIDE_AND_GROOM_GENITIVE,
         'wedding_date': settings.WEDDING_DATE,
-        'wedding_location': settings.WEDDING_LOCATION
+        'wedding_location': settings.WEDDING_LOCATION,
+        'website': settings.WEDDING_WEBSITE_URL
     })
 
 def rsvp(request):
@@ -110,7 +122,7 @@ def rsvp_invalid(request):
         'website': settings.WEDDING_WEBSITE_URL,
     })
 
-InviteResponse = namedtuple('InviteResponse', ['guest_pk', 'is_attending', 'meal'])
+InviteResponse = namedtuple('InviteResponse', ['guest_pk', 'is_attending', 'meal', 'allergic'])
 
 
 def _parse_invite_params(params):
@@ -126,9 +138,14 @@ def _parse_invite_params(params):
             response = responses.get(pk, {})
             response['meal'] = value
             responses[pk] = response
+        elif param.startswith('allergic'):
+            pk = int(param.split('-')[-1])
+            response = responses.get(pk, {})
+            response['allergic'] = value
+            responses[pk] = response
 
     for pk, response in responses.items():
-        yield InviteResponse(pk, response['attending'], response.get('meal', None))
+        yield InviteResponse(pk, response['attending'], response.get('meal', None), response.get('allergic', None))
 
 
 def rsvp_confirm(request, invite_id=None):
