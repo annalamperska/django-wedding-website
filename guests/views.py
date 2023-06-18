@@ -67,13 +67,15 @@ def invitation(request, invite_id):
             guest = Guest.objects.get(pk=response.guest_pk)
             assert guest.party == party
             guest.is_attending = response.is_attending
-            guest.meal = response.meal
+            if response.is_attending:
+                guest.meal = response.meal
+            else:
+                guest.meal = None
             guest.save()
-            party.is_attending = party.any_guests_attending
-            party.save()
         if request.POST.get('comments'):
             comments = request.POST.get('comments')
             party.comments = comments if not party.comments else '{}; {}'.format(party.comments, comments)
+        party.is_attending = party.any_guests_attending
         party.save()
         return HttpResponseRedirect(reverse('rsvp-confirm', args=[invite_id]))
     return render(request, template_name='guests/invitation.html', context={
@@ -95,7 +97,8 @@ def rsvp(request):
     return render(request, template_name='guests/rsvp.html', context={
         'support_email': settings.DEFAULT_WEDDING_REPLY_EMAIL,
         'rsvp_code_length': INVITATION_ID_LENGTH,
-        'couple_name_genitive': settings.BRIDE_AND_GROOM_GENITIVE
+        'couple_name_genitive': settings.BRIDE_AND_GROOM_GENITIVE,
+        'website': settings.WEDDING_WEBSITE_URL,
     })
 
 
@@ -103,7 +106,8 @@ def rsvp_invalid(request):
     return render(request, template_name='guests/rsvp-invalid.html', context={
         'support_email': settings.DEFAULT_WEDDING_REPLY_EMAIL,
         'rsvp_code_length': INVITATION_ID_LENGTH,
-        'couple_name_genitive': settings.BRIDE_AND_GROOM_GENITIVE
+        'couple_name_genitive': settings.BRIDE_AND_GROOM_GENITIVE,
+        'website': settings.WEDDING_WEBSITE_URL,
     })
 
 InviteResponse = namedtuple('InviteResponse', ['guest_pk', 'is_attending', 'meal'])
