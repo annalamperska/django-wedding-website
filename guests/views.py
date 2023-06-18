@@ -150,7 +150,7 @@ def _parse_invite_params(params):
 
 def rsvp_confirm(request, invite_id=None):
     party = guess_party_by_invite_id_or_404(invite_id)
-    return render(request, template_name='guests/rsvp_confirmation.html', context={
+    return render(request, template_name='guests/rsvp-confirmation.html', context={
         'party': party,
         'support_email': settings.DEFAULT_WEDDING_REPLY_EMAIL,
         'website': settings.WEDDING_WEBSITE_URL,

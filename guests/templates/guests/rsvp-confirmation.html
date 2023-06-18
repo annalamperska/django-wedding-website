@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block page_head %}
-    <link href="{% static 'bigday/css/rsvp-confirmation.css' %}" rel="stylesheet" xmlns="http://www.w3.org/1999/html">
+    <link href="{% static 'bigday/css/rsvp-confirmation.css' %}?{% now 'U' %}" rel="stylesheet" xmlns="http://www.w3.org/1999/html">
 {% endblock %}
 {% block page_content %}
     <div class="layer"></div>
@@ -12,7 +12,7 @@
                 Dziękujemy za potwierdzenie obecności. Już nie możemy doczekać się wspólnej biesiady i świętowania!
             </p>
             <p>
-                Jeśli macie jakiekolwiek pytania, zerknijcie na stronę <a href="{{ website }}">{{ website }}</a>, a jeśli nie znajdziecie odpowiedzi i tam, nie wahajcie się skontaktować z nami mailowo (<a href="mailto:{{ support_email }}">{{ support_email }}</a>) lub telefonicznie (numery podane są w zaproszeniach).
+                Jeśli macie jakiekolwiek pytania, zerknijcie na stronę <a href="https://{{ website }}">{{ website }}</a>, a jeśli nie znajdziecie odpowiedzi i tam, nie wahajcie się skontaktować z nami mailowo (<a href="mailto:{{ support_email }}">{{ support_email }}</a>) lub telefonicznie (numery podane są w zaproszeniach).
             </p>
         {% else %}
             <p>

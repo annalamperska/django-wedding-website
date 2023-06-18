@@ -38,7 +38,7 @@
                 </label>
                 {% endwith %}
             </div>
-            <div class="form-group meal">
+            <div class="form-group meal" {% if not guest.is_attending %}style="display:none"{% endif %}>
                 {% with 'meal-'|add:guest.unique_id as meal_label %}
                 <label for="{{ meal_label }}" class="col-sm-3 control-label">Dieta</label>
                 {% for meal_id, meal_name in meals %}
@@ -48,7 +48,7 @@
                 {% endfor %}
                 {% endwith %}
             </div>
-            <div class="form-group meal allergic">
+            <div class="form-group meal allergic" {% if guest.meal != 'allergic' %}style="display:none"{% endif %}>
                 {% with 'allergic-'|add:guest.unique_id as allergic_label %}
                 <label for="{{ allergic_label }}" class="col-sm-3 control-label"></label>
                 <input type="text" name="{{ allergic_label }}" class="allergic col-sm-8" placeholder="Na jakie pokarmy masz uczulenie?" {% if guest.meal == 'allergic' %}required{% endif %}>
