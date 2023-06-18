@@ -39,7 +39,7 @@ class Party(models.Model):
 
     @property
     def ordered_guests(self):
-        return self.guest_set.order_by('is_child', 'pk')
+        return self.guest_set.order_by('is_plus_one', 'pk')
 
     @property
     def any_guests_attending(self):
@@ -68,7 +68,7 @@ class Guest(models.Model):
     email = models.TextField(null=True, blank=True)
     is_attending = models.BooleanField(default=None, null=True)
     meal = models.CharField(max_length=20, choices=MEALS, null=True, blank=True)
-    is_child = models.BooleanField(default=False)
+    is_plus_one = models.BooleanField(default=False)
 
     @property
     def name(self):

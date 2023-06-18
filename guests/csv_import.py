@@ -17,9 +17,9 @@ def import_guests(path):
                 first_row = False
                 continue
             if len(row) == 6:
-                party_name, first_name, last_name, is_child, category, invitation_id = row[:6]
+                party_name, first_name, last_name, is_plus_one, category, invitation_id = row[:6]
             else:
-                party_name, first_name, last_name, is_child, category = row[:5]
+                party_name, first_name, last_name, is_plus_one, category = row[:5]
                 invitation_id = _random_uuid()
             if not party_name:
                 print ('skipping row {}'.format(row))
@@ -30,14 +30,14 @@ def import_guests(path):
                 party.invitation_id = invitation_id
             party.save()
             guest = Guest.objects.get_or_create(party=party, first_name=first_name, last_name=last_name)[0]
-            guest.is_child = _is_true(is_child)
+            guest.is_plus_one = _is_true(is_plus_one)
             guest.save()
 
 
 def export_guests():
     headers = [
         'party_name', 'first_name', 'last_name',
-        'is_child', 'category', 'is_attending',
+        'is_plus_one', 'category', 'is_attending',
         'rehearsal_dinner', 'meal', 'email', 'comments'
     ]
     file = io.StringIO()
@@ -50,7 +50,7 @@ def export_guests():
                     party.name,
                     guest.first_name,
                     guest.last_name,
-                    guest.is_child,
+                    guest.is_plus_one,
                     party.category,
                     guest.is_attending,
                     party.rehearsal_dinner,

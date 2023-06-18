@@ -157,7 +157,7 @@ You are also able to CC someone on all your outgoing emails using `WEDDING_CC_LI
 To actually be able to send emails, you need to import your guests first.
 The import method expects a CSV file with the following header:
 
-`party_name,first_name,last_name,is_child,category,invitation_id`
+`party_name,first_name,last_name,is_plus_one,category,invitation_id`
 
 A sample line could be:
 
@@ -166,7 +166,7 @@ A sample line could be:
 The import command is:
 
 ```bash
-python manage.py import_guests guestList.csv
+python manage.py import_guests guestsList.csv
 ```
 
 If you want to add more guests to the list, simply create a new CSV and rerun the command.

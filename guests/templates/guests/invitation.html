@@ -7,10 +7,10 @@
     <div class="container" id="invitation-body">
         <section class="col-md-6 text-center">
             <div id="invitation-details">
-            <h2>Ślub Ani i Michała</h2>
+            <h2>Ślub {{ couple_name_genitive }}</h2>
             <p class="lead">
-                5 sierpnia 2023 r., godz. 15:00<br>
-                Polna Zdrój, Wleń
+                {{ wedding_date }}, godz. 15:00<br>
+                {{ wedding_location }}
             </p>
             </div>
         </section>
@@ -20,19 +20,18 @@
             <div class="clearfix"></div>
             {% csrf_token %}
             {% for guest in party.ordered_guests.all %}
-            <div class="form-group" data-is-child="{{ guest.is_child }}">
+            <div class="form-group attend" data-is-plus-one="{{ guest.is_plus_one }}">
                 {% with 'attending-'|add:guest.unique_id as attending_label %}
                 <label for="{{ attending_label }}" class="col-sm-3 control-label">{{ guest.name }}</label>
                 <label class="radio-inline">
-                    <input class="attending-radio" type="radio" name="{{ attending_label }}" value="yes" {% if guest.is_attending %}checked="checked"{% endif %} required> will attend
+                    <input class="attending-radio" type="radio" name="{{ attending_label }}" value="yes" {% if guest.is_attending %}checked="checked"{% endif %} required> weźmie udział
                 </label>
                 <label class="radio-inline">
-                    <input class="attending-radio" type="radio" name="{{ attending_label }}" value="no" {% if guest.is_attending == False %}checked="checked"{% endif %} required> will not attend
+                    <input class="attending-radio" type="radio" name="{{ attending_label }}" value="no" {% if guest.is_attending == False %}checked="checked"{% endif %} required> nie weźmie udziału
                 </label>
                 {% endwith %}
             </div>
-            {% if not guest.is_child %}
-            <div class="form-group">
+            <div class="form-group meal" data-is-plus-one="{{ guest.is_plus_one }}">
                 {% with 'meal-'|add:guest.unique_id as meal_label %}
                 <label for="{{ meal_label }}" class="col-sm-3 control-label">... and will eat</label>
                 {% for meal_id, meal_name in meals %}
@@ -42,7 +41,6 @@
                 {% endfor %}
                 {% endwith %}
             </div>
-            {% endif %}
             {% endfor %}
             <div class="form-group col-sm-12">
                 <input type="text" name="comments" class="form-control" placeholder="Questions/comments/well wishes" >
@@ -63,27 +61,39 @@
         // enable/disable meal choices based on attendance
         $("input.attending-radio").change(function (e) {
             var target = $(e.target);
-            if (target.closest('.form-group').data('is-child') === "True") {
-                // don't attempt to update meals for children, who don't have them.
-                return;
-            }
             var value = target.attr('value');
-            var mealButtonContainer = target.closest('.form-group').next('.form-group');
-            var mealButtons = mealButtonContainer.find('[type=radio]');
-            if (value === 'yes') {
-                mealButtonContainer.removeClass('text-muted');
+            var mealButtonContainer = target.closest('.form-group').next('.meal');
+            var is_main_guest = target.closest('.form-group').data('is-plus-one') === 'False';
+            var is_plus_one = document.querySelectorAll('[data-is-plus-one="True"]');
+            
+
+            if (value === "no") {
+                mealButtonContainer[0].style.display = "none";
+                if (is_main_guest && is_plus_one) {
+                    for (let i = 0; i < is_plus_one.length; i++) {
+                        is_plus_one[i].style.display = "none";
+                    }
+                }
+            } else if(value === "yes") {
+                mealButtonContainer[0].style.display = "block";
+                mealButtons = mealButtonContainer.find('[type=radio]');
                 mealButtons.each(function (index, button) {
                     button.disabled = false;
                     button.required = true;
                 });
-            } else if (value === "no") {
-                mealButtonContainer.addClass('text-muted');
-                mealButtons.each(function (index, button) {
-                    button.checked = false;
-                    button.disabled = true;
-                    button.required = false;
-                });
-            }
+                if (is_main_guest && is_plus_one) {
+                    is_plus_one[0].style.display = "block";
+                    checked = is_plus_one[0].getElementsByTagName('input')[0].checked;
+                    if (checked) {
+                        for (let i = 1; i < is_plus_one.length; i++) {
+                        is_plus_one[i].style.display = "block";
+                    }
+                    }
+                };
+            };
+                
+
+            
             // reload validation
             $(document.forms[0]).validator('destroy');
             $(document.forms[0]).validator();

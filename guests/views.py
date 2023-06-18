@@ -37,13 +37,6 @@ def dashboard(request):
     parties_with_unopen_invites = parties_with_pending_invites.filter(invitation_opened=None)
     parties_with_open_unresponded_invites = parties_with_pending_invites.exclude(invitation_opened=None)
     attending_guests = Guest.objects.filter(is_attending=True)
-    guests_without_meals = attending_guests.filter(
-        is_child=False
-    ).filter(
-        Q(meal__isnull=True) | Q(meal='')
-    ).order_by(
-        'party__category', 'first_name'
-    )
     meal_breakdown = attending_guests.exclude(meal=None).values('meal').annotate(count=Count('*'))
     category_breakdown = attending_guests.values('party__category').annotate(count=Count('*'))
     return render(request, 'guests/dashboard.html', context={
@@ -76,15 +69,19 @@ def invitation(request, invite_id):
             guest.is_attending = response.is_attending
             guest.meal = response.meal
             guest.save()
+            party.is_attending = party.any_guests_attending
+            party.save()
         if request.POST.get('comments'):
             comments = request.POST.get('comments')
             party.comments = comments if not party.comments else '{}; {}'.format(party.comments, comments)
-        party.is_attending = party.any_guests_attending
         party.save()
         return HttpResponseRedirect(reverse('rsvp-confirm', args=[invite_id]))
     return render(request, template_name='guests/invitation.html', context={
         'party': party,
         'meals': MEALS,
+        'couple_name_genitive': settings.BRIDE_AND_GROOM_GENITIVE,
+        'wedding_date': settings.WEDDING_DATE,
+        'wedding_location': settings.WEDDING_LOCATION
     })
 
 def rsvp(request):
@@ -97,14 +94,16 @@ def rsvp(request):
                 return HttpResponseRedirect(reverse('rsvp-invalid'))
     return render(request, template_name='guests/rsvp.html', context={
         'support_email': settings.DEFAULT_WEDDING_REPLY_EMAIL,
-        'rsvp_code_length': INVITATION_ID_LENGTH
+        'rsvp_code_length': INVITATION_ID_LENGTH,
+        'couple_name_genitive': settings.BRIDE_AND_GROOM_GENITIVE
     })
 
 
 def rsvp_invalid(request):
     return render(request, template_name='guests/rsvp-invalid.html', context={
         'support_email': settings.DEFAULT_WEDDING_REPLY_EMAIL,
-        'rsvp_code_length': INVITATION_ID_LENGTH
+        'rsvp_code_length': INVITATION_ID_LENGTH,
+        'couple_name_genitive': settings.BRIDE_AND_GROOM_GENITIVE
     })
 
 InviteResponse = namedtuple('InviteResponse', ['guest_pk', 'is_attending', 'meal'])
@@ -134,6 +133,7 @@ def rsvp_confirm(request, invite_id=None):
         'party': party,
         'support_email': settings.DEFAULT_WEDDING_REPLY_EMAIL,
         'website': settings.WEDDING_WEBSITE_URL,
+        'couple_name_genitive': settings.BRIDE_AND_GROOM_GENITIVE
     })
 
 
