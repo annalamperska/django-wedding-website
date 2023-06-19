@@ -70,17 +70,22 @@ def invitation(request, invite_id):
             if guest.is_plus_one and not mainGuestAttends:
                 guest.is_attending = False
                 guest.meal = None
+                guest.is_allergic = None
                 guest.allergic = None
             else:
                 guest.is_attending = response.is_attending
                 mainGuestAttends = guest.is_attending
                 if response.is_attending:
                     guest.meal = response.meal
-                    if guest.meal == 'allergic':
+                    guest.is_allergic = response.is_allergic
+                    if guest.is_allergic:
                         guest.allergic = response.allergic
+                    else:
+                        guest.allergic = None  
                 else:
                     guest.meal = None
-                    guest.allergic = None                
+                    guest.is_allergic = None
+                    guest.allergic = None   
             guest.save()
             party.save()
         if request.POST.get('comments'):
@@ -91,7 +96,7 @@ def invitation(request, invite_id):
         return HttpResponseRedirect(reverse('rsvp-confirm', args=[invite_id]))
     return render(request, template_name='guests/invitation.html', context={
         'party': party,
-        'meals': MEALS,
+        'meals': MEALS+[('is_allergic', 'alergia')],
         'couple_name_genitive': settings.BRIDE_AND_GROOM_GENITIVE,
         'wedding_date': settings.WEDDING_DATE,
         'wedding_location': settings.WEDDING_LOCATION,
@@ -122,7 +127,7 @@ def rsvp_invalid(request):
         'website': settings.WEDDING_WEBSITE_URL,
     })
 
-InviteResponse = namedtuple('InviteResponse', ['guest_pk', 'is_attending', 'meal', 'allergic'])
+InviteResponse = namedtuple('InviteResponse', ['guest_pk', 'is_attending', 'meal', 'is_allergic', 'allergic'])
 
 
 def _parse_invite_params(params):
@@ -138,14 +143,21 @@ def _parse_invite_params(params):
             response = responses.get(pk, {})
             response['meal'] = value
             responses[pk] = response
+        elif param.startswith('is_allergic'):
+            pk = int(param.split('-')[-1])
+            response = responses.get(pk, {})
+            response['is_allergic'] = True if value == 'on' else False
+            responses[pk] = response
         elif param.startswith('allergic'):
             pk = int(param.split('-')[-1])
             response = responses.get(pk, {})
             response['allergic'] = value
-            responses[pk] = response
+            responses[pk] = response            
 
     for pk, response in responses.items():
-        yield InviteResponse(pk, response['attending'], response.get('meal', None), response.get('allergic', None))
+        if 'is_allergic' not in response.keys():
+            response['is_allergic'] = False if response['attending'] else None
+        yield InviteResponse(pk, response['attending'], response.get('meal', None), response['is_allergic'], response.get('allergic', None))
 
 
 def rsvp_confirm(request, invite_id=None):

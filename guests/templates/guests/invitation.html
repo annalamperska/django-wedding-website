@@ -39,19 +39,23 @@
                 {% endwith %}
             </div>
             <div class="form-group meal" {% if not guest.is_attending %}style="display:none"{% endif %}>
-                {% with 'meal-'|add:guest.unique_id as meal_label %}
+                {% with 'meal-'|add:guest.unique_id as meal_label and 'is_allergic-'|add:guest.unique_id as is_allergic_label %}
                 <label for="{{ meal_label }}" class="col-sm-3 control-label">Dieta</label>
                 {% for meal_id, meal_name in meals %}
                 <label class="radio-inline">
-                    <input class="meal" type="radio" name="{{ meal_label }}" value="{{ meal_id }}" {% if guest.meal == meal_id %}checked="checked"{% endif %} required> {{ meal_name }}
+                    {% if meal_id != 'is_allergic' %}
+                    <input class="meal" type="radio" name="{{ meal_label }}" value="{{ meal_id }}" id="{{ meal_id }}" {% if guest.meal == meal_id %}checked="checked"{% endif %} required> {{ meal_name }}
+                    {% else %}
+                    <input class="is_allergic" type="checkbox" name="{{ is_allergic_label }}" {% if guest.is_allergic %}checked="checked"{% endif %}> {{ meal_name }}
+                    {% endif %}
                 </label>
                 {% endfor %}
                 {% endwith %}
             </div>
-            <div class="form-group meal allergic" {% if guest.meal != 'allergic' %}style="display:none"{% endif %}>
+            <div class="form-group meal allergic" {% if not guest.is_allergic %}style="display:none"{% endif %}>
                 {% with 'allergic-'|add:guest.unique_id as allergic_label %}
                 <label for="{{ allergic_label }}" class="col-sm-3 control-label"></label>
-                <input type="text" name="{{ allergic_label }}" class="allergic col-sm-8" placeholder="Na jakie pokarmy masz uczulenie?" {% if guest.meal == 'allergic' %}required{% endif %}>
+                <input type="text" name="{{ allergic_label }}" class="allergic col-sm-8" placeholder="Na jakie pokarmy masz uczulenie?" required>
                 {% endwith %}
             </div></div>
             {% endfor %}
@@ -70,6 +74,14 @@
 {% block page_js %}
     <script src="{% static 'validator.js' %}"></script>
     <script>
+    mealButtons = document.getElementsByClassName("meal");
+    console.log(mealButtons)
+    for (let i = 0; i < mealButtons.length; i++) {
+        if (mealButtons[i].value == "all") {
+            mealButtons[i].checked = true;
+            console.log(mealButtons[i])
+        }
+    }
     $(function () {
         // enable/disable meal choices based on attendance
         $("input.attending-radio").change(function (e) {
@@ -100,7 +112,7 @@
                 for (let i = 1; i < mealButtons.length; i++) {
                     button = mealButtons[i].children[0]
                     button.disabled = false
-                    if (button.value === 'allergic' && button.checked){
+                    if (button.className === 'is_allergic' && button.checked){
                         allergicContainer.style.display = "block";
                     }
                 };   
@@ -120,15 +132,15 @@
         });
     });
     $(function () {
-        // enable/disable meal choices based on attendance
-        $("input.meal").change(function (e) {
+        // enable/disable allergic input based on diet choice
+        $("input.is_allergic").change(function (e) {
             var target = $(e.target);
-            var value = target.attr('value');
-            var name = target.attr('name');
+            var is_allergic = target[0].checked;
+            var name = target[0].name;
             var allergicLabel = 'allergic-' + name.split('-').slice(-1);
             var allergicContainer = target.closest('.form-group').next('.allergic');
-            
-            if (value === "allergic") {
+
+            if (is_allergic) {
                 allergicContainer[0].style.display = "block";
                 document.getElementsByName(allergicLabel)[0].required; 
             } else {
