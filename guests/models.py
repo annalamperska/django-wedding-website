@@ -70,6 +70,7 @@ class Guest(models.Model):
     is_allergic = models.BooleanField(default=False, null=True)
     allergic = models.TextField(null=True, blank=True)
     is_plus_one = models.BooleanField(default=False)
+    plus_one_name = models.TextField(null=True, blank=True)
 
     @property
     def name(self):
