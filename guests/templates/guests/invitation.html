@@ -32,17 +32,17 @@
                         <div class="form-group {{ attending_label }}">
                             <label for="{{ attending_label }}" class="col-sm-3 control-label">{{ guest.name }}</label>
                             <label class="radio-inline">
-                                <input class="attending-radio" type="radio" name="{{ attending_label }}" value="yes" {% if guest.is_attending %}checked="checked"{% endif %} required> weźmie udział
+                                <input type="radio" class="attending-radio" name="{{ attending_label }}" value="yes" {% if guest.is_attending %}checked="checked"{% endif %} required> weźmie udział
                             </label>
                             <label class="radio-inline">
-                                <input class="attending-radio" type="radio" name="{{ attending_label }}" value="no" {% if guest.is_attending == False %}checked="checked"{% endif %} required> nie weźmie udziału
+                                <input type="radio" class="attending-radio" name="{{ attending_label }}" value="no" {% if guest.is_attending == False %}checked="checked"{% endif %} required> nie weźmie udziału
                             </label>
                         </div>
                         {% endwith %}
                         {% with 'plus_one-'|add:guest.unique_id as plus_one_label %}
                         <div class="form-group col-sm-12 {{ plus_one_label }}" {% if not guest.is_plus_one %}style="display:none"{% endif %}>
                             <label for="{{ plus_one_label }}" class="col-sm-3 control-label"></label>
-                            <input type="text" name="{{ plus_one_label }}" class="plus_one col-sm-8" placeholder="Imię i nazwisko Osoby Towarzyszącej" required>
+                            <input type="text" class="plus_one col-sm-8" name="{{ plus_one_label }}" placeholder="Imię i nazwisko Osoby Towarzyszącej" required>
                         </div>
                         {% endwith %}
                     </div>
@@ -53,9 +53,9 @@
                             {% for meal_id, meal_name in meals %}
                             <label class="radio-inline">
                                 {% if meal_id != 'is_allergic' %}
-                                <input class="meal" type="radio" name="{{ meal_label }}" value="{{ meal_id }}" id="{{ meal_id }}" {% if defaultMeal == meal_id %}checked="checked"{% endif %} required> {{ meal_name }}
+                                <input type="radio" class="meal" name="{{ meal_label }}" value="{{ meal_id }}" id="{{ meal_id }}" {% if defaultMeal == meal_id %}checked="checked"{% endif %} required> {{ meal_name }}
                                 {% else %}
-                                <input class="is_allergic" type="checkbox" name="{{ is_allergic_label }}" {% if guest.is_allergic %}checked="checked"{% endif %}> {{ meal_name }}
+                                <input type="checkbox" class="is_allergic" name="{{ is_allergic_label }}" {% if guest.is_allergic %}checked="checked"{% endif %}> {{ meal_name }}
                                 {% endif %}
                             </label>
                             {% endfor %}
@@ -63,15 +63,37 @@
                         {% with 'allergic-'|add:guest.unique_id as allergic_label %}
                         <div class="form-group col-sm-12 {{ allergic_label }}" {% if not guest.is_allergic %}style="display:none"{% endif %}>
                             <label for="{{ allergic_label }}" class="col-sm-3 control-label"></label>
-                            <input type="text" name="{{ allergic_label }}" class="allergic col-sm-8" placeholder="Na jakie pokarmy masz uczulenie?" required>
+                            <input type="text" class="allergic col-sm-8" name="{{ allergic_label }}" placeholder="Na jakie pokarmy masz uczulenie?" required>
                         </div>
                         {% endwith %}
                     </div>
                     {% endwith %}
                 </div>
                 {% endfor %}
+                <hr>
+                <div class="form-group contact">
+                    <div class="form-group phone">
+                        <label for="contact" class="col-sm-3 control-label">Kontakt</label>
+                        <label class="radio-inline">
+                            <input type="checkbox" class="prefersPhone" name="phone" {% if guest.prefersPhone %}checked="checked"{% endif %}> telefon
+                        </label>
+                        <label class="radio-inline">
+                            <input type="text" class="phoneNumber" name="phoneNumber" placeholder="Numer telefonu" required {% if not party.phoneNumber %}style="display:none"{% endif %}>
+                        </label>
+                    </div>
+                    <div class="form-group email">
+                        <label for="contact" class="col-sm-3 control-label"></label>
+                        <label class="radio-inline">
+                            <input type="checkbox" class="prefersEmail" name="email" {% if guest.prefersEmail %}checked="checked"{% endif %}> e-mail
+                        </label>
+                        <label class="radio-inline">
+                            <input type="text" class="emailAddress" name="emailAddress" placeholder="Adres e-mail" required {% if not party.emailAddress %}style="display:none"{% endif %}>
+                        </label>
+                    </div>
+                </div>
+                <hr>
                 <div class="form-group col-sm-12">
-                    <input type="text" name="comments" class="form-control" placeholder="Masz jakieś uwagi lub życzenia muzyczne?" >
+                    <input type="text" class="form-control" name="comments" placeholder="Masz jakieś uwagi lub życzenia muzyczne?" >
                 </div>
                 <div class="form-group">
                     <div class="text-center">
@@ -157,6 +179,44 @@
                 document.getElementsByName(allergicLabel)[0].required; 
             } else {
                 allergicContainer.style.display = "none";
+            };
+            // reload validation
+            $(document.forms[0]).validator('destroy');
+            $(document.forms[0]).validator();
+        });
+    });
+    $(function () {
+        // enable/disable contact details input based on contact choice
+        $("input.prefersPhone").change(function (e) {
+            var target = $(e.target);
+            var prefersPhone = target[0].checked;
+            var phoneNumberContainer = document.getElementsByClassName("phoneNumber")[0];
+            
+            if (prefersPhone) {
+                phoneNumberContainer.style.display = "block";
+                document.getElementsByName("phoneNumber")[0].required; 
+            } else {
+                phoneNumberContainer.style.display = "none";
+            };
+            // reload validation
+            $(document.forms[0]).validator('destroy');
+            $(document.forms[0]).validator();
+        });
+    });
+    $(function () {
+        // enable/disable contact details input based on contact choice
+        $("input.prefersEmail").change(function (e) {
+            var target = $(e.target);
+            var prefersEmail = target[0].checked;
+            var emailAddressContainer = document.getElementsByClassName("emailAddress")[0];
+
+            console.log(prefersEmail)
+
+            if (prefersEmail) {
+                emailAddressContainer.style.display = "block";
+                document.getElementsByName("emailAddress")[0].required; 
+            } else {
+                emailAddressContainer.style.display = "none";; 
             };
             // reload validation
             $(document.forms[0]).validator('destroy');

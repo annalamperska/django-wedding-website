@@ -87,10 +87,18 @@ def invitation(request, invite_id):
                     guest.allergic = None   
             guest.save()
             party.save()
+        party.is_attending = party.any_guests_attending
+        party.save()
+        if party.is_attending:
+            if request.POST.get('phoneNumber'):
+                phoneNumber = request.POST.get('phoneNumber')
+                party.phoneNumber = phoneNumber if not party.phoneNumber else '{}; {}'.format(party.phoneNumber, phoneNumber)
+            if request.POST.get('emailAddress'):
+                emailAddress = request.POST.get('emailAddress')
+                party.emailAddress = emailAddress if not party.emailAddress else '{}; {}'.format(party.emailAddress, emailAddress)
         if request.POST.get('comments'):
             comments = request.POST.get('comments')
-            party.comments = comments if not party.comments else '{}; {}'.format(party.comments, comments)
-        party.is_attending = party.any_guests_attending
+            party.comments = comments if not party.comments else '{}; {}'.format(party.comments, comments)  
         party.save()
         return HttpResponseRedirect(reverse('rsvp-confirm', args=[invite_id]))
     return render(request, template_name='guests/invitation.html', context={
@@ -156,7 +164,7 @@ def _parse_invite_params(params):
             pk = int(param.split('-')[-1])
             response = responses.get(pk, {})
             response['allergic'] = value
-            responses[pk] = response            
+            responses[pk] = response
 
     for pk, response in responses.items():
         if 'is_allergic' not in response.keys():

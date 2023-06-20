@@ -28,6 +28,8 @@ class Party(models.Model):
     invitation_opened = models.DateTimeField(null=True, blank=True, default=None)
     rehearsal_dinner = models.BooleanField(default=False)
     is_attending = models.BooleanField(default=None, null=True)
+    phoneNumber = models.TextField(null=True, blank=True)
+    emailAddress = models.TextField(null=True, blank=True)
     comments = models.TextField(null=True, blank=True)
 
     def __str__(self):
@@ -64,7 +66,6 @@ class Guest(models.Model):
     party = models.ForeignKey('Party', on_delete=models.CASCADE)
     first_name = models.TextField()
     last_name = models.TextField(null=True, blank=True)
-    email = models.TextField(null=True, blank=True)
     is_attending = models.BooleanField(default=None, null=True)
     meal = models.CharField(max_length=20, choices=MEALS, null=True, blank=True)
     is_allergic = models.BooleanField(default=False, null=True)
