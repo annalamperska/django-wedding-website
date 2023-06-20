@@ -71,23 +71,44 @@
                 </div>
                 {% endfor %}
                 <hr>
+                <div class="form-group logistics">
+                    <div class="form-group transportation">
+                        <label for="transportation" class="col-sm-3 control-label">Transport</label>
+                        <label class="radio-inline">
+                            <input type="radio" class="transportation-radio" name="transportation" value="notNeeded" required> własny
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" class="transportation-radio" name="transportation" value="needed" required> chętnie skorzystam
+                        </label>
+                    </div>
+                    <div class="form-group accommodation">
+                        <label for="accommodation" class="col-sm-3 control-label">Nocleg</label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" class="accommodation" name="friSat"> z piątku na sobotę
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" class="accommodation" name="SatSun"> z soboty na niedzielę
+                        </label>
+                    </div>
+                    <hr>
+                </div>
                 <div class="form-group contact">
                     <div class="form-group phone">
                         <label for="contact" class="col-sm-3 control-label">Kontakt</label>
                         <label class="radio-inline">
-                            <input type="checkbox" class="prefersPhone" name="phone" {% if guest.prefersPhone %}checked="checked"{% endif %}> telefon
+                            <input type="checkbox" class="prefersPhone" name="phone"> telefon
                         </label>
                         <label class="radio-inline">
-                            <input type="text" class="phoneNumber" name="phoneNumber" placeholder="Numer telefonu" required {% if not party.phoneNumber %}style="display:none"{% endif %}>
+                            <input type="text" class="phoneNumber" name="phoneNumber" placeholder="Numer telefonu" required style="display:none">
                         </label>
                     </div>
                     <div class="form-group email">
                         <label for="contact" class="col-sm-3 control-label"></label>
                         <label class="radio-inline">
-                            <input type="checkbox" class="prefersEmail" name="email" {% if guest.prefersEmail %}checked="checked"{% endif %}> e-mail
+                            <input type="checkbox" class="prefersEmail" name="email"> e-mail
                         </label>
                         <label class="radio-inline">
-                            <input type="text" class="emailAddress" name="emailAddress" placeholder="Adres e-mail" required {% if not party.emailAddress %}style="display:none"{% endif %}>
+                            <input type="text" class="emailAddress" name="emailAddress" placeholder="Adres e-mail" required style="display:none">
                         </label>
                     </div>
                 </div>
@@ -107,23 +128,37 @@
 {% block page_js %}
     <script src="{% static 'validator.js' %}"></script>
     <script>
+
+    var guests_attending = {}
+
+    function is_any_main_guest_attending() {
+        for (let guest in guests_attending) {
+            if (guests_attending[guest]){
+                return true
+            }
+        }
+        return false
+    }
+
     $(function () {
         // enable/disable meal choices based on attendance
         $("input.attending-radio").change(function (e) {
             var target = $(e.target);
             var value = target.attr('value');
             var name = target.attr('name');
-            var guestLabel = 'guest-' + name.split('-').slice(-1);
-            var attendingLabel = 'attending-' + name.split('-').slice(-1);
-            var plusOneLabel = 'plus_one-' + name.split('-').slice(-1);
-            var mealLabel = 'meal-' + name.split('-').slice(-1);
-            var allergicLabel = 'allergic-' + name.split('-').slice(-1);
+            var id = name.split('-').slice(-1);
+            var guestLabel = 'guest-' + id;
+            var attendingLabel = 'attending-' + id;
+            var plusOneLabel = 'plus_one-' + id;
+            var mealLabel = 'meal-' + id;
+            var allergicLabel = 'allergic-' + id;
 
             var guestContainer = document.getElementsByClassName(guestLabel)[0];
             var attendanceContainer = document.getElementsByClassName(attendingLabel)[0];
             var plusOneContainer = document.getElementsByClassName(plusOneLabel)[0];
             var mealButtonContainer = document.getElementsByClassName(mealLabel)[0];
             var allergicContainer = document.getElementsByClassName(allergicLabel)[0];
+            var logisticsContainer = document.getElementsByClassName("logistics")[0];
 
             var is_main_guest = guestContainer.getAttribute('data-is-plus-one') === 'False';
             var is_plus_one = guestContainer.getAttribute('data-is-plus-one') === 'True';
@@ -133,9 +168,13 @@
                 plusOneContainer.style.display = "none";
                 mealButtonContainer.style.display = "none";
                 allergicContainer.style.display = "none";
-                if (is_main_guest && plus_one_occurs) {
-                    for (let i = 0; i < plus_one_occurs.length; i++) {
-                        plus_one_occurs[i].style.display = "none";
+                if (is_main_guest) {
+                    guests_attending[id] = false;
+                    console.log(guests_attending)
+                    if (plus_one_occurs.length > 0) {
+                        for (let i = 0; i < plus_one_occurs.length; i++) {
+                            plus_one_occurs[i].style.display = "none";
+                        }
                     }
                 }
             } else if(value === "yes") {
@@ -144,27 +183,37 @@
                 for (let i = 1; i < mealButtons.length; i++) {
                     button = mealButtons[i].children[0]
                     button.disabled = false
-                    if (button.className === 'is_allergic' && button.checked){
+                    if (button.className === 'is_allergic' && button.checked) {
                         allergicContainer.style.display = "block";
                     }
                 };   
-                if (is_main_guest && plus_one_occurs) {
-                    plus_one_occurs[0].style.display = "block";
-                    plus_one_attends = plus_one_occurs[0].getElementsByTagName('input')[0].checked;
-                    if (plus_one_attends) {
-                        for (let i = 1; i < plus_one_occurs.length; i++) {
-                        plus_one_occurs[i].style.display = "block";
+                if (is_main_guest) {
+                    guests_attending[id] = true;
+                    if (plus_one_occurs.length > 0) {
+                        plus_one_occurs[0].style.display = "block";
+                        plus_one_attends = plus_one_occurs[0].getElementsByTagName('input')[0].checked;
+                        if (plus_one_attends) {
+                            for (let i = 1; i < plus_one_occurs.length; i++) {
+                                plus_one_occurs[i].style.display = "block";
+                            }
                         }
                     }
                 } else if (is_plus_one) {
                     plusOneContainer.style.display = "block";
                 }
             };
+
+            if (is_any_main_guest_attending()) {
+                logisticsContainer.style.display = "block";
+            } else {
+                logisticsContainer.style.display = "none";
+            }
             // reload validation
             $(document.forms[0]).validator('destroy');
             $(document.forms[0]).validator();
         });
     });
+
     $(function () {
         // enable/disable allergic input based on diet choice
         $("input.is_allergic").change(function (e) {
@@ -185,6 +234,7 @@
             $(document.forms[0]).validator();
         });
     });
+
     $(function () {
         // enable/disable contact details input based on contact choice
         $("input.prefersPhone").change(function (e) {
@@ -203,6 +253,7 @@
             $(document.forms[0]).validator();
         });
     });
+
     $(function () {
         // enable/disable contact details input based on contact choice
         $("input.prefersEmail").change(function (e) {

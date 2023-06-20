@@ -28,6 +28,9 @@ class Party(models.Model):
     invitation_opened = models.DateTimeField(null=True, blank=True, default=None)
     rehearsal_dinner = models.BooleanField(default=False)
     is_attending = models.BooleanField(default=None, null=True)
+    transportationNeeded = models.BooleanField(default=False)
+    friSatAccommodation = models.BooleanField(default=False)
+    satSunAccommodation = models.BooleanField(default=False)
     phoneNumber = models.TextField(null=True, blank=True)
     emailAddress = models.TextField(null=True, blank=True)
     comments = models.TextField(null=True, blank=True)
@@ -46,10 +49,6 @@ class Party(models.Model):
     @property
     def any_guests_attending(self):
         return any(self.guest_set.values_list('is_attending', flat=True))
-
-    @property
-    def guest_emails(self):
-        return list(filter(None, self.guest_set.values_list('email', flat=True)))
 
 
 MEALS = [

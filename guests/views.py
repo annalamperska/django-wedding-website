@@ -90,12 +90,16 @@ def invitation(request, invite_id):
         party.is_attending = party.any_guests_attending
         party.save()
         if party.is_attending:
-            if request.POST.get('phoneNumber'):
-                phoneNumber = request.POST.get('phoneNumber')
-                party.phoneNumber = phoneNumber if not party.phoneNumber else '{}; {}'.format(party.phoneNumber, phoneNumber)
-            if request.POST.get('emailAddress'):
-                emailAddress = request.POST.get('emailAddress')
-                party.emailAddress = emailAddress if not party.emailAddress else '{}; {}'.format(party.emailAddress, emailAddress)
+            transportation = request.POST.get('transportation')
+            party.transportationNeeded = True if transportation == 'needed' else False
+            party.friSatAccommodation = True if request.POST.get('friSat') else False
+            party.satSunAccommodation = True if request.POST.get('SatSun') else False
+        if request.POST.get('phoneNumber'):
+            phoneNumber = request.POST.get('phoneNumber')
+            party.phoneNumber = phoneNumber if not party.phoneNumber else '{}; {}'.format(party.phoneNumber, phoneNumber)
+        if request.POST.get('emailAddress'):
+            emailAddress = request.POST.get('emailAddress')
+            party.emailAddress = emailAddress if not party.emailAddress else '{}; {}'.format(party.emailAddress, emailAddress)
         if request.POST.get('comments'):
             comments = request.POST.get('comments')
             party.comments = comments if not party.comments else '{}; {}'.format(party.comments, comments)  
