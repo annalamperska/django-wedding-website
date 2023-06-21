@@ -554,7 +554,8 @@ body {
 
 #footer {
     background-color: #222;
-    padding-bottom: 30px;
+    padding-bottom: 15px;
+    line-height: 50px;
 }
 
 
