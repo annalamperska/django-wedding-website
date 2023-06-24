@@ -31,12 +31,12 @@
                         {% with 'attending-'|add:guest.unique_id as attending_label %}
                         <div class="form-group {{ attending_label }}">
                             <label for="{{ attending_label }}" class="col-sm-3 control-label">{{ guest.name }}</label>
-                            <label class="radio-inline">
-                                <input type="radio" class="attending-radio" name="{{ attending_label }}" value="yes" {% if guest.is_attending %}checked="checked"{% endif %} required> weźmie udział
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" class="attending-radio" name="{{ attending_label }}" value="no" {% if guest.is_attending == False %}checked="checked"{% endif %} required> nie weźmie udziału
-                            </label>
+                                <label class="radio-inline column">
+                                    <input type="radio" class="attending-radio" name="{{ attending_label }}" value="yes" {% if guest.is_attending %}checked="checked"{% endif %} required> weźmie udział
+                                </label>
+                                <label class="radio-inline column">
+                                    <input type="radio" class="attending-radio" name="{{ attending_label }}" value="no" {% if guest.is_attending == False %}checked="checked"{% endif %} required> nie weźmie udziału
+                                </label>
                         </div>
                         {% endwith %}
                         {% with 'plus_one-'|add:guest.unique_id as plus_one_label %}
@@ -51,7 +51,7 @@
                         <div class="form-group {{ meal_label }}">
                             <label for="{{ meal_label }}" class="col-sm-3 control-label">Dieta</label>
                             {% for meal_id, meal_name in meals %}
-                            <label class="radio-inline">
+                            <label class="radio-inline column">
                                 {% if meal_id != 'is_allergic' %}
                                 <input type="radio" class="meal" name="{{ meal_label }}" value="{{ meal_id }}" id="{{ meal_id }}" {% if defaultMeal == meal_id %}checked="checked"{% endif %} required> {{ meal_name }}
                                 {% else %}
@@ -62,8 +62,8 @@
                         </div>
                         {% with 'allergic-'|add:guest.unique_id as allergic_label %}
                         <div class="form-group col-sm-12 {{ allergic_label }}" {% if not guest.is_allergic %}style="display:none"{% endif %}>
-                            <label for="{{ allergic_label }}" class="col-sm-3 control-label"></label>
-                            <input type="text" class="allergic col-sm-8" name="{{ allergic_label }}" placeholder="Na jakie pokarmy masz uczulenie?" required>
+                            <label for="{{ allergic_label }}" class="col-sm-3"></label>
+                            <textarea class="allergic col-sm-8" name="{{ allergic_label }}" placeholder="Na jakie pokarmy masz uczulenie?" required></textarea>
                         </div>
                         {% endwith %}
                     </div>
@@ -74,19 +74,19 @@
                 <div class="form-group logistics">
                     <div class="form-group transportation">
                         <label for="transportation" class="col-sm-3 control-label">Transport</label>
-                        <label class="radio-inline">
+                        <label class="radio-inline column">
                             <input type="radio" class="transportation-radio" name="transportation" value="notNeeded" required> własny
                         </label>
-                        <label class="radio-inline">
+                        <label class="radio-inline column">
                             <input type="radio" class="transportation-radio" name="transportation" value="needed" required> chętnie skorzystam
                         </label>
                     </div>
                     <div class="form-group accommodation">
                         <label for="accommodation" class="col-sm-3 control-label">Nocleg</label>
-                        <label class="checkbox-inline">
+                        <label class="checkbox-inline column">
                             <input type="checkbox" class="accommodation" name="friSat"> z piątku na sobotę
                         </label>
-                        <label class="checkbox-inline">
+                        <label class="checkbox-inline column">
                             <input type="checkbox" class="accommodation" name="SatSun"> z soboty na niedzielę
                         </label>
                     </div>
@@ -95,26 +95,26 @@
                 <div class="form-group contact">
                     <div class="form-group phone">
                         <label for="contact" class="col-sm-3 control-label">Kontakt</label>
-                        <label class="radio-inline">
-                            <input type="checkbox" class="prefersPhone" name="phone"> telefon
+                        <label class="radio-inline column">
+                            <input type="checkbox" class="prefersPhone" name="prefersPhone"> telefon
                         </label>
-                        <label class="radio-inline">
-                            <input type="text" class="phoneNumber" name="phoneNumber" placeholder="Numer telefonu" required style="display:none">
+                        <label class="radio-inline column">
+                            <input type="text" class="phoneNumber" name="phoneNumber" placeholder="Numer telefonu" required {% if not party.phoneNumber %}style="display:none"{% endif %}>
                         </label>
                     </div>
                     <div class="form-group email">
                         <label for="contact" class="col-sm-3 control-label"></label>
-                        <label class="radio-inline">
-                            <input type="checkbox" class="prefersEmail" name="email"> e-mail
+                        <label class="radio-inline column">
+                            <input type="checkbox" class="prefersEmail" name="prefersEmail"> e-mail
                         </label>
-                        <label class="radio-inline">
-                            <input type="text" class="emailAddress" name="emailAddress" placeholder="Adres e-mail" required style="display:none">
+                        <label class="radio-inline column">
+                            <input type="text" class="emailAddress" name="emailAddress" placeholder="Adres e-mail" required  {% if not party.emailAddress %}style="display:none"{% endif %}>
                         </label>
                     </div>
                 </div>
                 <hr>
                 <div class="form-group col-sm-12">
-                    <input type="text" class="form-control" name="comments" placeholder="Masz jakieś uwagi lub życzenia muzyczne?" >
+                    <textarea class="form-control" name="comments" placeholder="Masz jakieś uwagi lub życzenia muzyczne?" ></textarea>
                 </div>
                 <div class="form-group">
                     <div class="text-center">
