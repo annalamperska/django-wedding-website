@@ -19,13 +19,24 @@
 }
 
 body {
-    background: url('../images/invite-background.jpg') no-repeat center center fixed;
+    background: url('../images/invite-background3.png') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    background-attachment: fixed;
 }
 
 #footer {
-    padding-bottom: 30px;
+    background: none;
+}
+
+@media (max-width: 700px) {
+    body {
+        background: url('../images/decline.png') no-repeat center center fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position-x: 55%;
+        height: auto;
+    }
 }

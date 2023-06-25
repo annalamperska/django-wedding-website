@@ -1,7 +1,7 @@
 from django.urls import re_path
 
 from guests.views import GuestListView, test_email, save_the_date_preview, save_the_date_random, export_guests, \
-    invitation, invitation_email_preview, invitation_email_test, rsvp_confirm, dashboard, rsvp, rsvp_invalid
+    invitation, invitation_email_preview, invitation_email_test, rsvp_confirm, rsvp_decline, dashboard, rsvp, rsvp_invalid
 
 urlpatterns = [
     re_path(r'^guests/$', GuestListView.as_view(), name='guest-list'),
@@ -14,6 +14,7 @@ urlpatterns = [
     re_path(r'^save-the-date/(?P<template_id>[\w-]+)/$', save_the_date_preview, name='save-the-date'),
     re_path(r'^email-test/(?P<template_id>[\w-]+)/$', test_email, name='test-email'),
     re_path(r'^rsvp/confirm/(?P<invite_id>[\w-]+)/$', rsvp_confirm, name='rsvp-confirm'),
+    re_path(r'^rsvp/decline/(?P<invite_id>[\w-]+)/$', rsvp_decline, name='rsvp-decline'),
     re_path(r'^rsvp/$', rsvp, name='rsvp'),
     re_path(r'^rsvp-invalid$', rsvp_invalid, name='rsvp-invalid')
 ]

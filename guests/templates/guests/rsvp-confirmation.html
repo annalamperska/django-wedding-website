@@ -7,21 +7,12 @@
     <div class="layer"></div>
     <div class="container" id="main">
         <h2>Kochani!</h2>
-        {% if party.any_guests_attending %}
-            <p>
-                Dziękujemy za potwierdzenie obecności. Już nie możemy doczekać się wspólnej biesiady i świętowania!
-            </p>
-            <p>
-                Jeśli macie jakiekolwiek pytania, zerknijcie na stronę <a href="https://{{ website }}">{{ website }}</a>, a jeśli nie znajdziecie odpowiedzi i tam, nie wahajcie się skontaktować z nami mailowo (<a href="mailto:{{ support_email }}">{{ support_email }}</a>) lub telefonicznie (numery podane są w zaproszeniach).
-            </p>
-        {% else %}
-            <p>
-                Jest nam niezmiernie przykro, że nie będzie Wam dane świętować razem z nami.
-            </p>
-            <p>
-                Wypijcie nasze zdrowie i do zobaczenia przy następnej okazji!
-            </p>
-        {% endif %}
+        <p>
+            Dziękujemy za potwierdzenie obecności. Już nie możemy doczekać się wspólnej biesiady i świętowania!
+        </p>
+        <p>
+            Jeśli macie jakiekolwiek pytania, zerknijcie na stronę <a href="https://{{ website }}">{{ website }}</a>, a jeśli nie znajdziecie odpowiedzi i tam, nie wahajcie się skontaktować z nami mailowo (<a href="mailto:{{ support_email }}">{{ support_email }}</a>) lub telefonicznie (numery podane są w zaproszeniach).
+        </p>
         <p>
             - Ania i Michał
         </p>

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_head %}
+    <link href="{% static 'bigday/css/rsvp-decline.css' %}?{% now 'U' %}" rel="stylesheet" xmlns="http://www.w3.org/1999/html">
+{% endblock %}
+{% block page_content %}
+    <div class="layer"></div>
+    <div class="container" id="main">
+        <h2>Kochani!</h2>
+        <p>
+            Jest nam niezmiernie przykro, że nie będzie Wam dane świętować razem z nami.
+        </p>
+        <p>
+            Wypijcie nasze zdrowie i do zobaczenia przy następnej okazji!
+        </p>
+        <p>
+            - Ania i Michał
+        </p>
+    </div>
+{% endblock %}

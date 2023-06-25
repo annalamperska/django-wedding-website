@@ -102,7 +102,10 @@ def invitation(request, invite_id):
             comments = request.POST.get('comments')
             party.comments = comments if not party.comments else '{}; {}'.format(party.comments, comments)  
         party.save()
-        return HttpResponseRedirect(reverse('rsvp-confirm', args=[invite_id]))
+        if party.any_guests_attending:
+            return HttpResponseRedirect(reverse('rsvp-confirm', args=[invite_id]))
+        else:
+            return HttpResponseRedirect(reverse('rsvp-decline', args=[invite_id]))
     return render(request, template_name='guests/invitation.html', context={
         'party': party,
         'meals': MEALS+[('is_allergic', 'alergia')],
@@ -177,6 +180,16 @@ def _parse_invite_params(params):
 def rsvp_confirm(request, invite_id=None):
     party = guess_party_by_invite_id_or_404(invite_id)
     return render(request, template_name='guests/rsvp-confirmation.html', context={
+        'party': party,
+        'support_email': settings.DEFAULT_WEDDING_REPLY_EMAIL,
+        'website': settings.WEDDING_WEBSITE_URL,
+        'couple_name_genitive': settings.BRIDE_AND_GROOM_GENITIVE
+    })
+
+
+def rsvp_decline(request, invite_id=None):
+    party = guess_party_by_invite_id_or_404(invite_id)
+    return render(request, template_name='guests/rsvp-decline.html', context={
         'party': party,
         'support_email': settings.DEFAULT_WEDDING_REPLY_EMAIL,
         'website': settings.WEDDING_WEBSITE_URL,
